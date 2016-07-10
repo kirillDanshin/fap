@@ -1,5 +1,5 @@
 # fap
-## Go fap
+Go fap
 
 # TODO
 - [ ] `fap init`
