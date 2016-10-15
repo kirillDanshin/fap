@@ -28,6 +28,12 @@ Builds your package with qtc templates and runs `go install`
 
 Builds your package with qtc templates and runs `go install -tags "debug"`
 
+### Release
+
+`fap release "Some message"`
+
+Adds all changes to git, commit them with "Some message" and pushes it to origin/master
+
 # TODO
 
 - [x] `fap init`
