@@ -32,5 +32,5 @@ Builds your package with qtc templates and runs `go install -tags "debug"`
 
 - [x] `fap init`
 - [x] `fap build` builds qtc templates and runs go install
-- [ ] `fap release`
+- [x] `fap release`
 - [ ] `fap deploy`
