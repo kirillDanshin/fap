@@ -1,0 +1,22 @@
+{% func HomeHandler(packageName string) %}{% if packageName == "main" %}package main{% else %}package {%s packageName %}{% endif %}
+
+import (
+	"github.com/valyala/fasthttp"
+	"github.com/buaazp/fasthttprouter"
+)
+
+var (
+	homeGreetsTpl = []byte("Hi, ")
+	homeGreetsNameParam = "name"
+	homeGreetsDefaultName = []byte("Guest")
+)
+
+func homeHandler(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
+	ctx.Write(homeGreetsTpl)
+	if name := ps.ByName(homeGreetsNameParam); len(name) > 0 {
+		ctx.WriteString(name)
+	} else {
+		ctx.Write(homeGreetsDefaultName)
+	}
+}
+{% endfunc %}

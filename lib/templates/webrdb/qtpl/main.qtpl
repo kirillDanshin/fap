@@ -1,0 +1,31 @@
+{% func FastHTTPRouter(packageName string) %}{% if packageName == "main" %}package main{% else %}package {%s packageName %}{% endif %}
+
+import ({% if packageName == "main" %}
+	"flag"
+
+{% endif %}	"github.com/kirillDanshin/dlog"
+	"github.com/kirillDanshin/fap/web"
+	"github.com/valyala/fasthttp"
+	"github.com/buaazp/fasthttprouter"
+)
+{% if packageName == "main" %}
+var (
+	address = flag.String("address", "127.0.0.1:3270", "address to bind")
+){% endif %}
+
+{% if packageName == "main" %}func main() {
+	flag.Parse()
+	addr := *address
+{% else %}func Run(addr string) {{% endif %}
+	dlog.F("Registering handlers")
+
+	web.RegisterChain(web.HandlersChain{
+		web.MethodGET: web.MethodChain{
+			"/": homeHandler,
+		}
+	})
+
+	dlog.F("Listening on %%s", addr)
+	myutils.LogFatalError(web.ListenAndServe(addr))
+}
+{% endfunc %}
