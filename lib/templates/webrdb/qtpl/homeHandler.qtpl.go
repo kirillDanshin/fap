@@ -35,50 +35,82 @@ func StreamHomeHandler(qw422016 *qt422016.Writer, packageName string) {
 	qw422016.N().S(`
 
 import (
+	"fmt"
 	"github.com/valyala/fasthttp"
 	"github.com/buaazp/fasthttprouter"
+	r "gopkg.in/dancannon/gorethink.v2"
 )
 
 var (
 	homeGreetsTpl = []byte("Hi, ")
 	homeGreetsNameParam = "name"
 	homeGreetsDefaultName = []byte("Guest")
+	homeCounterTpl = []byte("This page was viewed: ")
+	homeCounterEnd = []byte(" times")
 )
 
 func homeHandler(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
 	ctx.Write(homeGreetsTpl)
-	if name := ps.ByName(homeGreetsNameParam) {
+	if name := ps.ByName(homeGreetsNameParam); len(name) > 0 {
 		ctx.WriteString(name)
 	} else {
 		ctx.Write(homeGreetsDefaultName)
 	}
+	filter := map[string]interface{}{
+	    "uri": string(ctx.URI().Path()),
+	}
+	var (
+		tmp []interface{}
+		count = float64(0)
+	)
+ 	f, _ := r.Table("stats").Filter(filter).Run(rdb)
+	f.All(&tmp)
+	f.Close()
+	if len(tmp) > 0 {
+		r.Table("stats").Filter(filter).Update(map[string]interface{}{
+			"views": r.Row.Field("views").Add(1).Default(0),
+		}).RunWrite(rdb)
+		v, _ := r.Table("stats").Filter(filter).Run(rdb)
+		c := map[string]interface{}{}
+		v.Peek(&c)
+		count = c["views"].(float64)
+		v.Close()
+	} else {
+		filter["views"] = 1
+		r.Table("stats").Insert(filter).RunWrite(rdb)
+		count = 1
+	}
+	fmt.Fprintln(ctx)
+	ctx.Write(homeCounterTpl)
+	fmt.Fprint(ctx, count)
+	ctx.Write(homeCounterEnd)
 }
 `)
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 }
 
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 func WriteHomeHandler(qq422016 qtio422016.Writer, packageName string) {
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 	StreamHomeHandler(qw422016, packageName)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 	qt422016.ReleaseWriter(qw422016)
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 }
 
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 func HomeHandler(packageName string) string {
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 	WriteHomeHandler(qb422016, packageName)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 	qs422016 := string(qb422016.B)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 	return qs422016
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:22
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
 }

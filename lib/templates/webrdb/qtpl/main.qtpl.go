@@ -47,75 +47,97 @@ import (`)
 	//line lib/templates/webrdb/qtpl/main.qtpl:6
 	qw422016.N().S(`	"github.com/kirillDanshin/dlog"
 	"github.com/kirillDanshin/fap/web"
-	"github.com/valyala/fasthttp"
-	"github.com/buaazp/fasthttprouter"
+	"github.com/kirillDanshin/myutils"
+
+	r "gopkg.in/dancannon/gorethink.v2"
+)
+var (`)
+	//line lib/templates/webrdb/qtpl/main.qtpl:12
+	if packageName == "main" {
+		//line lib/templates/webrdb/qtpl/main.qtpl:12
+		qw422016.N().S(`
+	address = flag.String("address", "127.0.0.1:3270", "address to bind")
+	rdbAddr = flag.String("rdbAddr", "127.0.0.1:28015", "rethinkdb address for connection")
+	rDBName	= flag.String("rDB", "fap", "rethinkdb database name")
+`)
+		//line lib/templates/webrdb/qtpl/main.qtpl:16
+	}
+	//line lib/templates/webrdb/qtpl/main.qtpl:16
+	qw422016.N().S(`
+	rdb *r.Session
 )
 `)
-	//line lib/templates/webrdb/qtpl/main.qtpl:11
+	//line lib/templates/webrdb/qtpl/main.qtpl:19
 	if packageName == "main" {
-		//line lib/templates/webrdb/qtpl/main.qtpl:11
-		qw422016.N().S(`
-var (
-	address = flag.String("address", "127.0.0.1:3270", "address to bind")
-)`)
-		//line lib/templates/webrdb/qtpl/main.qtpl:14
-	}
-	//line lib/templates/webrdb/qtpl/main.qtpl:14
-	qw422016.N().S(`
-
-`)
-	//line lib/templates/webrdb/qtpl/main.qtpl:16
-	if packageName == "main" {
-		//line lib/templates/webrdb/qtpl/main.qtpl:16
+		//line lib/templates/webrdb/qtpl/main.qtpl:19
 		qw422016.N().S(`func main() {
 	flag.Parse()
 	addr := *address
+	rdbAddress := *rdbAddr
+	rDB := *rDBName
 `)
-		//line lib/templates/webrdb/qtpl/main.qtpl:19
+		//line lib/templates/webrdb/qtpl/main.qtpl:24
 	} else {
-		//line lib/templates/webrdb/qtpl/main.qtpl:19
-		qw422016.N().S(`func Run(addr string) {`)
-		//line lib/templates/webrdb/qtpl/main.qtpl:19
+		//line lib/templates/webrdb/qtpl/main.qtpl:24
+		qw422016.N().S(`func Run(addr, rdbAddress, rDB string) {`)
+		//line lib/templates/webrdb/qtpl/main.qtpl:24
 	}
-	//line lib/templates/webrdb/qtpl/main.qtpl:19
+	//line lib/templates/webrdb/qtpl/main.qtpl:24
 	qw422016.N().S(`
+	var err error
+
+	dlog.F("Connecting to RethinkDB")
+	rdb, err = r.Connect(r.ConnectOpts{
+	    Address: rdbAddress,
+		Database: rDB,
+	})
+	myutils.LogFatalError(err)
+
+	r.DBCreate(rDB).Run(rdb)
+
+	tl := []string{}
+	req, err := r.TableList().Run(rdb)
+	r.TableCreate("stats").Run(rdb)
+	myutils.LogFatalError(err)
+
+	dlog.D(req.All(&tl))
+	dlog.D(tl)
+
+	w := web.New(addr)
+
 	dlog.F("Registering handlers")
 
-	web.RegisterChain(web.HandlersChain{
-		web.MethodGET: web.MethodChain{
-			"/": homeHandler,
-		}
-	})
+	w.RegisterChain(getRouteChain())
 
-	dlog.F("Listening on %%s", addr)
-	myutils.LogFatalError(web.ListenAndServe(addr))
+	dlog.F("Listening on %s", addr)
+	myutils.LogFatalError(w.ListenAndServeGZip())
 }
 `)
-//line lib/templates/webrdb/qtpl/main.qtpl:31
+//line lib/templates/webrdb/qtpl/main.qtpl:53
 }
 
-//line lib/templates/webrdb/qtpl/main.qtpl:31
+//line lib/templates/webrdb/qtpl/main.qtpl:53
 func WriteFastHTTPRouter(qq422016 qtio422016.Writer, packageName string) {
-	//line lib/templates/webrdb/qtpl/main.qtpl:31
+	//line lib/templates/webrdb/qtpl/main.qtpl:53
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line lib/templates/webrdb/qtpl/main.qtpl:31
+	//line lib/templates/webrdb/qtpl/main.qtpl:53
 	StreamFastHTTPRouter(qw422016, packageName)
-	//line lib/templates/webrdb/qtpl/main.qtpl:31
+	//line lib/templates/webrdb/qtpl/main.qtpl:53
 	qt422016.ReleaseWriter(qw422016)
-//line lib/templates/webrdb/qtpl/main.qtpl:31
+//line lib/templates/webrdb/qtpl/main.qtpl:53
 }
 
-//line lib/templates/webrdb/qtpl/main.qtpl:31
+//line lib/templates/webrdb/qtpl/main.qtpl:53
 func FastHTTPRouter(packageName string) string {
-	//line lib/templates/webrdb/qtpl/main.qtpl:31
+	//line lib/templates/webrdb/qtpl/main.qtpl:53
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line lib/templates/webrdb/qtpl/main.qtpl:31
+	//line lib/templates/webrdb/qtpl/main.qtpl:53
 	WriteFastHTTPRouter(qb422016, packageName)
-	//line lib/templates/webrdb/qtpl/main.qtpl:31
+	//line lib/templates/webrdb/qtpl/main.qtpl:53
 	qs422016 := string(qb422016.B)
-	//line lib/templates/webrdb/qtpl/main.qtpl:31
+	//line lib/templates/webrdb/qtpl/main.qtpl:53
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line lib/templates/webrdb/qtpl/main.qtpl:31
+	//line lib/templates/webrdb/qtpl/main.qtpl:53
 	return qs422016
-//line lib/templates/webrdb/qtpl/main.qtpl:31
+//line lib/templates/webrdb/qtpl/main.qtpl:53
 }

@@ -23,6 +23,8 @@ import (
 	"github.com/imdario/mergo"
 	"github.com/kirillDanshin/fap/lib/templates/initreadme"
 	"github.com/kirillDanshin/fap/lib/templates/web"
+	"github.com/kirillDanshin/fap/lib/templates/webrdb"
+	"github.com/kirillDanshin/fap/lib/types"
 	"github.com/kirillDanshin/myutils"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
@@ -33,7 +35,20 @@ var fromCmd = &cobra.Command{
 	Use:   "from",
 	Short: "Generate from selected template",
 	Run: func(cmd *cobra.Command, args []string) {
-		packageStruct, _ := web.Generate("main")
+		if len(args) == 0 {
+			println("Choose a template")
+			os.Exit(1)
+		}
+		var packageStruct types.PackageStructure
+		switch args[0] {
+		case "web":
+			packageStruct, _ = web.Generate("main")
+		case "webrdb":
+			packageStruct, _ = webrdb.Generate("main")
+		default:
+			println("Unknown a template")
+			os.Exit(1)
+		}
 		fs := afero.Afero{Fs: afero.NewOsFs()}
 		if cmd.Flag("git").Value.String() == "true" {
 			exec.Command("git", "init").Run()
@@ -45,8 +60,10 @@ var fromCmd = &cobra.Command{
 		}
 		for filePath, content := range packageStruct {
 			exists, _ := fs.Exists(filePath)
-			if exists && cmd.Flag("overwrite").Value.String() == "true" || !exists {
+			if exists && cmd.Flag("overwrite").Value.String() == "true" {
 				log.Println("Overwriting", filePath)
+			}
+			if exists && cmd.Flag("overwrite").Value.String() == "true" || !exists {
 				dir, _ := path.Split(filePath)
 				if len(dir) != 0 {
 					os.MkdirAll(dir, 0755)

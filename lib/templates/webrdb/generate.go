@@ -1,7 +1,7 @@
 package webrdb
 
 import (
-	"github.com/kirillDanshin/fap/lib/templates/fasthttprouter/qtpl"
+	"github.com/kirillDanshin/fap/lib/templates/webrdb/qtpl"
 	"github.com/kirillDanshin/fap/lib/types"
 	"github.com/kirillDanshin/myutils"
 )

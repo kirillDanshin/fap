@@ -1,0 +1,16 @@
+{% func GetRouteChain(packageName string) %}{% if packageName == "main" %}package main{% else %}package {%s packageName %}{% endif %}
+
+import (
+	"github.com/kirillDanshin/fap/web"
+)
+
+func getRouteChain() web.HandlersChain{
+	return web.HandlersChain{
+		web.MethodGET: web.MethodChain{
+			"/": homeHandler,
+			"/:name": homeHandler,
+		},
+	}
+}
+
+{% endfunc %}
