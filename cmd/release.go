@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"log"
+	"os"
 	"os/exec"
 
 	"github.com/spf13/cobra"
@@ -30,15 +31,22 @@ var releaseCmd = &cobra.Command{
 			log.Printf("args: %#+v\n", args)
 			log.Println("Enter the release message")
 		}
+		log.Println("Adding changes to git")
 		if o, err := exec.Command("git", "add", ".").CombinedOutput(); err != nil {
 			log.Printf("git add . error: %s", o)
+			os.Exit(1)
 		}
+		log.Printf(`Commiting them with "%s" message`, args[0])
 		if o, err := exec.Command("git", "commit", "-m", args[0]).CombinedOutput(); err != nil {
 			log.Printf("git commit error: %s", o)
+			os.Exit(1)
 		}
+		log.Println("Pushing it")
 		if o, err := exec.Command("git", "push", "origin", "master").CombinedOutput(); err != nil {
 			log.Printf("git push origin master error: %s", o)
+			os.Exit(1)
 		}
+		log.Println("Done!")
 	},
 }
 
