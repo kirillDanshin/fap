@@ -3,7 +3,6 @@
 import (
 	"fmt"
 	"github.com/valyala/fasthttp"
-	"github.com/buaazp/fasthttprouter"
 	r "gopkg.in/dancannon/gorethink.v2"
 )
 

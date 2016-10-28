@@ -36,7 +36,6 @@ func StreamHomeHandler(qw422016 *qt422016.Writer, packageName string) {
 
 import (
 	"github.com/valyala/fasthttp"
-	"github.com/buaazp/fasthttprouter"
 )
 
 var (
@@ -45,40 +44,40 @@ var (
 	homeGreetsDefaultName = []byte("Guest")
 )
 
-func homeHandler(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
+func homeHandler(ctx *fasthttp.RequestCtx) {
 	ctx.Write(homeGreetsTpl)
-	if name := ps.ByName(homeGreetsNameParam); len(name) > 0 {
+	if name := ctx.UserValue(homeGreetsNameParam); len(name) > 0 {
 		ctx.WriteString(name)
 	} else {
 		ctx.Write(homeGreetsDefaultName)
 	}
 }
 `)
-//line lib/templates/web/qtpl/homeHandler.qtpl:22
+//line lib/templates/web/qtpl/homeHandler.qtpl:21
 }
 
-//line lib/templates/web/qtpl/homeHandler.qtpl:22
+//line lib/templates/web/qtpl/homeHandler.qtpl:21
 func WriteHomeHandler(qq422016 qtio422016.Writer, packageName string) {
-	//line lib/templates/web/qtpl/homeHandler.qtpl:22
+	//line lib/templates/web/qtpl/homeHandler.qtpl:21
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line lib/templates/web/qtpl/homeHandler.qtpl:22
+	//line lib/templates/web/qtpl/homeHandler.qtpl:21
 	StreamHomeHandler(qw422016, packageName)
-	//line lib/templates/web/qtpl/homeHandler.qtpl:22
+	//line lib/templates/web/qtpl/homeHandler.qtpl:21
 	qt422016.ReleaseWriter(qw422016)
-//line lib/templates/web/qtpl/homeHandler.qtpl:22
+//line lib/templates/web/qtpl/homeHandler.qtpl:21
 }
 
-//line lib/templates/web/qtpl/homeHandler.qtpl:22
+//line lib/templates/web/qtpl/homeHandler.qtpl:21
 func HomeHandler(packageName string) string {
-	//line lib/templates/web/qtpl/homeHandler.qtpl:22
+	//line lib/templates/web/qtpl/homeHandler.qtpl:21
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line lib/templates/web/qtpl/homeHandler.qtpl:22
+	//line lib/templates/web/qtpl/homeHandler.qtpl:21
 	WriteHomeHandler(qb422016, packageName)
-	//line lib/templates/web/qtpl/homeHandler.qtpl:22
+	//line lib/templates/web/qtpl/homeHandler.qtpl:21
 	qs422016 := string(qb422016.B)
-	//line lib/templates/web/qtpl/homeHandler.qtpl:22
+	//line lib/templates/web/qtpl/homeHandler.qtpl:21
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line lib/templates/web/qtpl/homeHandler.qtpl:22
+	//line lib/templates/web/qtpl/homeHandler.qtpl:21
 	return qs422016
-//line lib/templates/web/qtpl/homeHandler.qtpl:22
+//line lib/templates/web/qtpl/homeHandler.qtpl:21
 }

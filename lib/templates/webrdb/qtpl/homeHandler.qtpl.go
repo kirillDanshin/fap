@@ -37,7 +37,6 @@ func StreamHomeHandler(qw422016 *qt422016.Writer, packageName string) {
 import (
 	"fmt"
 	"github.com/valyala/fasthttp"
-	"github.com/buaazp/fasthttprouter"
 	r "gopkg.in/dancannon/gorethink.v2"
 )
 
@@ -49,9 +48,9 @@ var (
 	homeCounterEnd = []byte(" times")
 )
 
-func homeHandler(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
+func homeHandler(ctx *fasthttp.RequestCtx) {
 	ctx.Write(homeGreetsTpl)
-	if name := ps.ByName(homeGreetsNameParam); len(name) > 0 {
+	if name := ctx.UserValue(homeGreetsNameParam); len(name) > 0 {
 		ctx.WriteString(name)
 	} else {
 		ctx.Write(homeGreetsDefaultName)
@@ -86,31 +85,31 @@ func homeHandler(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
 	ctx.Write(homeCounterEnd)
 }
 `)
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 }
 
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 func WriteHomeHandler(qq422016 qtio422016.Writer, packageName string) {
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 	StreamHomeHandler(qw422016, packageName)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 	qt422016.ReleaseWriter(qw422016)
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 }
 
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 func HomeHandler(packageName string) string {
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 	WriteHomeHandler(qb422016, packageName)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 	qs422016 := string(qb422016.B)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+	//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 	return qs422016
-//line lib/templates/webrdb/qtpl/homeHandler.qtpl:54
+//line lib/templates/webrdb/qtpl/homeHandler.qtpl:53
 }

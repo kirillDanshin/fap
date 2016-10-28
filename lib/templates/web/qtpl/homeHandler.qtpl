@@ -2,7 +2,6 @@
 
 import (
 	"github.com/valyala/fasthttp"
-	"github.com/buaazp/fasthttprouter"
 )
 
 var (
