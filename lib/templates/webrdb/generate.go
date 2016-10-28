@@ -17,9 +17,9 @@ func Generate(packageName string) (types.PackageStructure, error) {
 		path = myutils.Concat(packageName, "/web.go")
 	}
 	structure := types.PackageStructure{
-		"homeHandler.go": qtpl.HomeHandler(packageName),
-		path:             qtpl.FastHTTPRouter(packageName),
-		"getRouteChain":  qtpl.GetRouteChain(packageName),
+		"homeHandler.go":   qtpl.HomeHandler(packageName),
+		path:               qtpl.FastHTTPRouter(packageName),
+		"getRouteChain.go": qtpl.GetRouteChain(packageName),
 	}
 	return structure, nil
 }
