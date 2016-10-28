@@ -19,6 +19,7 @@ func Generate(packageName string) (types.PackageStructure, error) {
 	structure := types.PackageStructure{
 		"homeHandler.go": qtpl.HomeHandler(packageName),
 		path:             qtpl.FastHTTPRouter(packageName),
+		"getRouteChain":  qtpl.GetRouteChain(packageName),
 	}
 	return structure, nil
 }
