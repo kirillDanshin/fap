@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/buaazp/fasthttprouter"
+	"github.com/valyala/fasthttp"
 )
 
 // method type is defined in methods.go
@@ -13,7 +14,7 @@ type (
 
 	// MethodChain describes a map that stores handlers
 	// for a path
-	MethodChain map[string]fasthttprouter.Handle
+	MethodChain map[string]func(*fasthttp.RequestCtx)
 
 	// Instance describes a server instance
 	Instance struct {
