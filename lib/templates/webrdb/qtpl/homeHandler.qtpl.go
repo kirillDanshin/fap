@@ -50,8 +50,8 @@ var (
 
 func homeHandler(ctx *fasthttp.RequestCtx) {
 	ctx.Write(homeGreetsTpl)
-	if name := ctx.UserValue(homeGreetsNameParam).(string); len(name) > 0 {
-		ctx.WriteString(name)
+	if name := ctx.UserValue(homeGreetsNameParam); name != nil && len(name.(string)) > 0 {
+		ctx.WriteString(name.(string))
 	} else {
 		ctx.Write(homeGreetsDefaultName)
 	}
