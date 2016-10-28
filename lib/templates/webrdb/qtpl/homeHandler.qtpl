@@ -15,9 +15,9 @@ var (
 	homeCounterEnd = []byte(" times")
 )
 
-func homeHandler(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
+func homeHandler(ctx *fasthttp.RequestCtx) {
 	ctx.Write(homeGreetsTpl)
-	if name := ps.ByName(homeGreetsNameParam); len(name) > 0 {
+	if name := ctx.UserValue(homeGreetsNameParam); len(name) > 0 {
 		ctx.WriteString(name)
 	} else {
 		ctx.Write(homeGreetsDefaultName)
