@@ -2,6 +2,12 @@
 
 Go fap
 
+## **WARNING!** EARLY BETA!
+
+Please send pull requests and send bugs if you catch one.
+
+Feauture requests are welcome!
+
 # Install
 
 `go get -u github.com/kirillDanshin/fap`
@@ -38,5 +44,9 @@ Adds all changes to git, commit them with "Some message" and pushes it to origin
 
 - [x] `fap init`
 - [x] `fap build` builds qtc templates and runs go install
-- [x] `fap release`
+- [x] `fap release` (alias for `git add .; git commit; git push`)
+- [ ] fap/web helper package
+- [ ] fapfile support
+- [ ] fap template API
 - [ ] `fap deploy`
+- [ ] `fap test`
