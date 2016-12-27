@@ -22,6 +22,7 @@ import (
 
 	"github.com/imdario/mergo"
 	"github.com/kirillDanshin/fap/lib/templates/initreadme"
+	"github.com/kirillDanshin/fap/lib/templates/static"
 	"github.com/kirillDanshin/fap/lib/templates/web"
 	"github.com/kirillDanshin/fap/lib/templates/webrdb"
 	"github.com/kirillDanshin/fap/lib/types"
@@ -45,6 +46,8 @@ var fromCmd = &cobra.Command{
 			packageStruct, _ = web.Generate("main")
 		case "webrdb":
 			packageStruct, _ = webrdb.Generate("main")
+		case "static":
+			packageStruct, _ = static.Generate("main")
 		default:
 			println("Unknown a template")
 			os.Exit(1)
